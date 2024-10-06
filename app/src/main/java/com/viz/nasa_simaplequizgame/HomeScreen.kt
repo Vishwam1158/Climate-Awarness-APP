@@ -28,7 +28,7 @@ fun HomeScreen(onStartQuiz: () -> Unit) {
 
         // Start Quiz Button
         Button(onClick = onStartQuiz) {
-            Text("Start AQI Quiz")
+            Text("Start Quiz")
         }
     }
 }

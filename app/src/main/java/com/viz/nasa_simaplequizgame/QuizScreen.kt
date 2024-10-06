@@ -16,12 +16,84 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun QuizScreen(cityName: String, onQuizCompleted: () -> Unit, onShowTips: () -> Unit) {
-    var guessAQI by remember { mutableStateOf(TextFieldValue("")) }
-    var actualAQI by remember { mutableStateOf<CityAQI?>(null) }
+fun FinishScreen(onBackToHome: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("Quiz Completed!", style = MaterialTheme.typography.bodySmall)
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Button(onClick = onBackToHome) {
+            Text("Back to Home Screen")
+        }
+    }
+}
+
+
+
+//@Composable
+//fun QuizScreenWQI(cityName: String, onNextQuiz: () -> Unit) {
+//    var guessWQI by remember { mutableStateOf(TextFieldValue("")) }
+//    var actualWQI by remember { mutableStateOf<CityWQI?>(null) }
+//    var showResult by remember { mutableStateOf(false) }
+//
+//    val citiesData = loadWQIData() // Load WQI data
+//
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(16.dp),
+//        verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        if (!showResult) {
+//            actualWQI = citiesData.find { it.name.equals(cityName, ignoreCase = true) }
+//
+//            if (actualWQI != null) {
+//                Text("Guess the WQI for $cityName:", style = MaterialTheme.typography.bodyLarge)
+//                Spacer(modifier = Modifier.height(16.dp))
+//
+//                TextField(
+//                    value = guessWQI,
+//                    onValueChange = { guessWQI = it },
+//                    label = { Text("Your WQI Guess") },
+//                    modifier = Modifier.fillMaxWidth()
+//                )
+//                Spacer(modifier = Modifier.height(20.dp))
+//
+//                Button(onClick = { showResult = true }) {
+//                    Text("Submit Answer")
+//                }
+//            }
+//        } else {
+//            actualWQI?.let {
+//                val guessedValue = guessWQI.text.toIntOrNull() ?: 0
+//                val difference = kotlin.math.abs(it.WQI - guessedValue)
+//
+//                Text("Actual WQI for ${it.name}: ${it.WQI} (${it.category})", style = MaterialTheme.typography.bodyLarge)
+//                Text("Your guess: $guessedValue", style = MaterialTheme.typography.bodyLarge)
+//                Text("Difference: $difference", style = MaterialTheme.typography.bodyLarge)
+//
+//                Spacer(modifier = Modifier.height(20.dp))
+//                Button(onClick = onNextQuiz) {
+//                    Text("Next Question: Temperature Variations")
+//                }
+//            }
+//        }
+//    }
+//}
+
+@Composable
+fun QuizScreenTemperature(cityName: String, onNextQuiz: () -> Unit) {
+    var guessTemp by remember { mutableStateOf(TextFieldValue("")) }
+    var actualTemp by remember { mutableStateOf<CityTemperature?>(null) }
     var showResult by remember { mutableStateOf(false) }
 
-    val citiesData = loadAQIData() // Simulated JSON data
+    val citiesData = loadTemperatureData() // Load Temperature data
 
     Column(
         modifier = Modifier
@@ -31,57 +103,42 @@ fun QuizScreen(cityName: String, onQuizCompleted: () -> Unit, onShowTips: () -> 
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (!showResult) {
-            actualAQI = citiesData.cities.find { it.name.equals(cityName, ignoreCase = true) }
+            actualTemp = citiesData.find { it.name.equals(cityName, ignoreCase = true) }
 
-            if (actualAQI != null) {
-                Text("Guess the AQI for $cityName:", style = MaterialTheme.typography.bodyLarge)
+            if (actualTemp != null) {
+                Text("How much has the average temperature increased in $cityName?", style = MaterialTheme.typography.bodyLarge)
                 Spacer(modifier = Modifier.height(16.dp))
 
                 TextField(
-                    value = guessAQI,
-                    onValueChange = { guessAQI = it },
-                    label = { Text("Your AQI Guess") },
+                    value = guessTemp,
+                    onValueChange = { guessTemp = it },
+                    label = { Text("Your Temperature Guess (°C)") },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Submit Answer Button
                 Button(onClick = { showResult = true }) {
                     Text("Submit Answer")
                 }
-            } else {
-                Text("City not found in AQI data. Try another city.", style = MaterialTheme.typography.bodyLarge)
-                Spacer(modifier = Modifier.height(20.dp))
             }
         } else {
-            // Show Results
-            actualAQI?.let {
-                val guessedValue = guessAQI.text.toIntOrNull() ?: 0
-                val difference = kotlin.math.abs(it.AQI - guessedValue)
+            actualTemp?.let {
+                val guessedValue = guessTemp.text.toFloatOrNull() ?: 0f
+                val difference = kotlin.math.abs(it.temperatureChange - guessedValue)
 
-                Text("Actual AQI for ${it.name}: ${it.AQI} (${it.category})", style = MaterialTheme.typography.bodyLarge)
-                Text("Your guess: $guessedValue", style = MaterialTheme.typography.bodyLarge)
-                Text("Difference: $difference", style = MaterialTheme.typography.bodyLarge)
-                Spacer(modifier = Modifier.height(20.dp))
-
-                // Button to show tips on the next screen
-                Button(onClick = onShowTips) {
-                    Text("Show Tips")
-                }
+                Text("Actual Temperature change for ${it.name}: ${it.temperatureChange}°C", style = MaterialTheme.typography.bodyLarge)
+                Text("Your guess: $guessedValue°C", style = MaterialTheme.typography.bodyLarge)
+                Text("Difference: $difference°C", style = MaterialTheme.typography.bodyLarge)
 
                 Spacer(modifier = Modifier.height(20.dp))
-
-                // Button to Restart Quiz
-                Button(onClick = {
-                    showResult = false
-                    onQuizCompleted()
-                }) {
-                    Text("Try Another City")
+                Button(onClick = onNextQuiz) {
+                    Text("See Tips")
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun TipsScreen(onBackToQuiz: () -> Unit) {
@@ -92,18 +149,16 @@ fun TipsScreen(onBackToQuiz: () -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Tips to Improve Air Quality", style = MaterialTheme.typography.headlineSmall)
+        Text("Tips to Improve Environment", style = MaterialTheme.typography.headlineSmall)
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Tips content
         Text("1. Plant more trees.", style = MaterialTheme.typography.bodyLarge)
-        Text("2. Reduce vehicle emissions.", style = MaterialTheme.typography.bodyLarge)
-        Text("3. Use public transport.", style = MaterialTheme.typography.bodyLarge)
-        Text("4. Avoid burning waste.", style = MaterialTheme.typography.bodyLarge)
-        Text("5. Promote clean energy sources.", style = MaterialTheme.typography.bodyLarge)
+        Text("2. Reduce emissions by using public transport.", style = MaterialTheme.typography.bodyLarge)
+        Text("3. Conserve water.", style = MaterialTheme.typography.bodyLarge)
+        Text("4. Promote renewable energy sources.", style = MaterialTheme.typography.bodyLarge)
+
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Back to Quiz Button
         Button(onClick = onBackToQuiz) {
             Text("Back to Quiz")
         }

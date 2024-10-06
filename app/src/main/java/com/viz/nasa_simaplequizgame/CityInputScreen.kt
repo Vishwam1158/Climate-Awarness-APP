@@ -24,13 +24,13 @@ import androidx.compose.ui.Modifier
 fun CityInputScreen(onSubmitCity: (String) -> Unit) {
     var cityName by remember { mutableStateOf(TextFieldValue("")) }
     var showSuggestions by remember { mutableStateOf(true) } // Control when to show suggestions
-    val citiesData = loadAQIData() // Load JSON Data
+    val citiesData = loadAQIData() // Load JSON Data, assuming this returns List<CityAQI>
 
     // Filter cities based on user input
     val suggestions = remember(cityName.text) {
         if (cityName.text.isNotEmpty() && showSuggestions) {
-            citiesData.cities.filter {
-                it.name.contains(cityName.text, ignoreCase = true)
+            citiesData.filter { city ->
+                city.name.startsWith(cityName.text, ignoreCase = true)  // Ensure suggestion only matches start of string
             }
         } else {
             emptyList()
@@ -44,7 +44,7 @@ fun CityInputScreen(onSubmitCity: (String) -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Enter a city name to start the AQI quiz:", style = MaterialTheme.typography.bodyLarge)
+        Text("Enter Your City Name:", style = MaterialTheme.typography.bodyLarge)
         Spacer(modifier = Modifier.height(16.dp))
 
         // City Name Input Field
@@ -62,7 +62,7 @@ fun CityInputScreen(onSubmitCity: (String) -> Unit) {
         // Show Suggestions below the TextField
         if (suggestions.isNotEmpty()) {
             Column(modifier = Modifier.fillMaxWidth()) {
-                suggestions.forEach { city ->
+                suggestions.forEach { city ->  // Explicitly reference CityAQI in forEach
                     CitySuggestionItem(cityName = city.name, onSelectCity = {
                         // Set the selected city name into the TextField
                         cityName = TextFieldValue(it)

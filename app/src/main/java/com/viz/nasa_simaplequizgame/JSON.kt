@@ -1,5 +1,72 @@
 package com.viz.nasa_simaplequizgame
-//
+
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
+// AQI JSON
+// Mock function to simulate loading AQI data from JSON
+fun loadAQIData(): List<CityAQI> {
+    val jsonData = """
+        {
+          "cities": [
+            {"name": "Mumbai", "AQI": 104, "category": "Poor", "lastUpdated": "2024-10-02T09:19:00Z"},
+            {"name": "New York", "AQI": 55, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+            {"name": "Delhi", "AQI": 315, "category": "Very Poor", "lastUpdated": "2024-10-02T09:19:00Z"}
+          ]
+        }
+    """
+    val gson = Gson()
+    val type = object : TypeToken<CitiesData>() {}.type
+
+    // Parse the JSON into the CitiesData object and return the list of cities
+    val citiesData: CitiesData = gson.fromJson(jsonData, type)
+    return citiesData.cities
+}
+
+
+
+// Mock function to simulate loading WQI data from JSON
+fun loadWQIData(): List<CityWQI> {
+    val jsonData = """
+        {
+          "cities": [
+            {"name": "Mumbai", "WQI": 70, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+            {"name": "New York", "WQI": 85, "category": "Good", "lastUpdated": "2024-10-02T09:19:00Z"},
+            {"name": "Tokyo", "WQI": 45, "category": "Poor", "lastUpdated": "2024-10-02T09:19:00Z"},
+            {"name": "Delhi", "WQI": 60, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"}
+          ]
+        }
+    """
+    val gson = Gson()
+    val type = object : TypeToken<CitiesWQIData>() {}.type
+    val citiesData: CitiesWQIData = gson.fromJson(jsonData, type)
+    return citiesData.cities
+}
+
+// Mock function to simulate loading Temperature data from JSON
+fun loadTemperatureData(): List<CityTemperature> {
+    val jsonData = """
+        {
+          "cities": [
+            {"name": "Mumbai", "temperatureChange": 1.2, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+            {"name": "New York", "temperatureChange": 0.9, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+            {"name": "Tokyo", "temperatureChange": 1.4, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+            {"name": "Delhi", "temperatureChange": 1.8, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"}
+          ]
+        }
+    """
+    val gson = Gson()
+    val type = object : TypeToken<CitiesTemperatureData>() {}.type
+    val citiesData: CitiesTemperatureData = gson.fromJson(jsonData, type)
+    return citiesData.cities
+}
+
+// Similar JSON for Greenhouse Gas Emissions, UHI, Drought Risk, Renewable Energy, Waste Generation.
+
+
+
+
+
 //import com.google.gson.Gson
 //import com.google.gson.reflect.TypeToken
 //import java.lang.reflect.Type
