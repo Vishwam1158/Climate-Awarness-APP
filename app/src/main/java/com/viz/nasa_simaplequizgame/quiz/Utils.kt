@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import com.viz.nasa_simaplequizgame.CustomOutlinedTextField
 import com.viz.nasa_simaplequizgame.R
 
+
 @Composable
 fun InfoScreen(
     title: String,
