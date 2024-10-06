@@ -66,16 +66,15 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.gson)
+    implementation(libs.ui)
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 
-    // Gson for JSON parsing
-    implementation("com.google.code.gson:gson:2.10.1")
-
-    // Other dependencies
-    implementation("androidx.compose.ui:ui:1.7.3") // Replace with your current version
-    implementation("androidx.compose.material:material:1.7.3") // Replace with your current version
-
-
-    implementation("androidx.navigation:navigation-compose:2.8.2")
 
 
 

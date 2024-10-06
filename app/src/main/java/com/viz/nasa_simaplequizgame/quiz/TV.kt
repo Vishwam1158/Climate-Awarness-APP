@@ -1,127 +1,75 @@
 package com.viz.nasa_simaplequizgame.quiz
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.dp
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.viz.nasa_simaplequizgame.CitiesTemperatureData
 import com.viz.nasa_simaplequizgame.CityTemperature
-import com.viz.nasa_simaplequizgame.loadTemperatureData
 
 @Composable
 fun TVInfoScreen(cityName: String, onNext: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Temperature Variations in last 10 years in your city", style = MaterialTheme.typography.bodySmall)
-        Text("How much has the temperature increased over the last 10 years in $cityName.")
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Button(onClick = onNext) {
-            Text("Next: Guess Temperature Variations")
-        }
-    }
+    InfoScreen(
+        title = "Temperature Variations in last 10 years in your city",
+        description = listOf(
+            "◉ Some cities get really hot during the day and cold at night.",
+            "◉ This is called temperature change.",
+            "◉ Big cities can be warmer than the countryside because of all the buildings and cars."
+        ),
+        cityName = cityName,
+        onNext = onNext
+    )
 }
 
 @Composable
 fun TVGuessScreen(cityName: String, onNext: () -> Unit) {
-    var guessTemperature by remember { mutableStateOf(TextFieldValue("")) }
-    var showResult by remember { mutableStateOf(false) }
-    var actualTemperature by remember { mutableStateOf<CityTemperature?>(null) }
-
-    // Load the actual temperature data for the city
     val citiesData = loadTemperatureData()
+    val actualTemperature = citiesData.find { it.name.equals(cityName, ignoreCase = true) }?.temperatureChange
 
-    // Find the temperature change for the selected city
-    actualTemperature = citiesData.find { it.name.equals(cityName, ignoreCase = true) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        if (!showResult) {
-            // Guess Temperature Change Phase
-            Text("Guess the temperature change for $cityName", style = MaterialTheme.typography.bodySmall)
-
-            TextField(
-                value = guessTemperature,
-                onValueChange = { guessTemperature = it },
-                label = { Text("Your Temperature Change Guess (°C)") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Button(onClick = {
-                showResult = true  // Show result after submitting
-            }) {
-                Text("Submit Guess")
-            }
-        } else {
-            // Display actual temperature change and difference after the guess
-            actualTemperature?.let { temp ->
-                val guessedValue = guessTemperature.text.toFloatOrNull() ?: 0f
-                val difference = kotlin.math.abs(temp.temperatureChange - guessedValue)
-
-                Text("Actual temperature change for ${temp.name}: ${temp.temperatureChange}${temp.unit}", style = MaterialTheme.typography.bodySmall)
-                Text("Your guess: $guessedValue°C", style = MaterialTheme.typography.bodyLarge)
-                Text("Difference: ${"%.1f".format(difference)}°C", style = MaterialTheme.typography.bodyLarge)
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Button(onClick = onNext) {
-                    Text("Next: Climate Change Tips")
-                }
-            } ?: run {
-                // In case actual temperature data is not found for the city
-                Text("Temperature data not available for $cityName", style = MaterialTheme.typography.bodyLarge)
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Button(onClick = onNext) {
-                    Text("Next: Climate Change Tips")
-                }
-            }
-        }
-    }
+    GuessScreen(
+        title = "Guess the temperature change for $cityName",
+        cityName = cityName,
+        actualValue = actualTemperature?.toDouble(),  // Pass the Double value
+        onNext = onNext,
+        placeholder = "Between 0.5 to 3.0"
+    )
 }
+
 @Composable
 fun TVTipsScreen(cityName: String, onNext: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("How to Improve AQI", style = MaterialTheme.typography.bodySmall)
-        Text("Here are some tips to improve air quality in $cityName:")
-        Text("1. Plant more trees.")
-        Text("2. Reduce vehicle emissions.")
-        Text("3. Use public transportation.")
-        Spacer(modifier = Modifier.height(20.dp))
+    TipsScreen(
+        title = "How to reduce climate impact",
+        tips = listOf(
+            "◉ Plant more trees/gardens.",
+            "◉ Use renewable energy.",
+            "◉ Reduce greenhouse gas emissions.",
+            "◉ Use energy-efficient appliances.",
+            "◉ Participate in community clean-up events"
+        ),
+        cityName = cityName,
+        onNext = onNext
+    )
+}
 
-        Button(onClick = onNext) {
-            Text("Next")
-        }
-    }
+fun loadTemperatureData(): List<CityTemperature> {
+    val jsonData = """
+        {
+  "cities": [
+    {"name": "Mumbai", "temperatureChange": 1.2, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Delhi", "temperatureChange": 2.0, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "New York", "temperatureChange": 1.5, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Tokyo", "temperatureChange": 1.8, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Ahmedabad", "temperatureChange": 2.5, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Surat", "temperatureChange": 1.7, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Bengaluru", "temperatureChange": 1.3, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Chennai", "temperatureChange": 2.1, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Hyderabad", "temperatureChange": 1.4, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Pune", "temperatureChange": 1.6, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"}
+  ]
+}
+
+    """
+    val gson = Gson()
+    val type = object : TypeToken<CitiesTemperatureData>() {}.type
+    val citiesData: CitiesTemperatureData = gson.fromJson(jsonData, type)
+    return citiesData.cities
 }

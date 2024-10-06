@@ -1,5 +1,7 @@
 package com.viz.nasa_simaplequizgame
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,6 +28,7 @@ import com.viz.nasa_simaplequizgame.quiz.WasteGenerationGuessScreen
 import com.viz.nasa_simaplequizgame.quiz.WasteGenerationInfoScreen
 import com.viz.nasa_simaplequizgame.quiz.WasteGenerationTipsScreen
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun ClimateQuizApp() {
     val navController = rememberNavController()
