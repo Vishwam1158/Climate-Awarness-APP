@@ -8,12 +8,64 @@ import com.google.gson.reflect.TypeToken
 fun loadAQIData(): List<CityAQI> {
     val jsonData = """
         {
-          "cities": [
-            {"name": "Mumbai", "AQI": 104, "category": "Poor", "lastUpdated": "2024-10-02T09:19:00Z"},
-            {"name": "New York", "AQI": 55, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
-            {"name": "Delhi", "AQI": 315, "category": "Very Poor", "lastUpdated": "2024-10-02T09:19:00Z"}
-          ]
-        }
+  "cities": [
+    {"name": "Mumbai", "AQI": 104, "category": "Poor", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Ahmedabad", "AQI": 106, "category": "Poor", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Surat", "AQI": 98, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Vadodara", "AQI": 110, "category": "Poor", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Rajkot", "AQI": 102, "category": "Poor", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Delhi", "AQI": 150, "category": "Unhealthy", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Bangalore", "AQI": 75, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Hyderabad", "AQI": 89, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Chennai", "AQI": 80, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Kolkata", "AQI": 120, "category": "Unhealthy for Sensitive Groups", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Pune", "AQI": 95, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Indore", "AQI": 90, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Bhopal", "AQI": 105, "category": "Poor", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Patna", "AQI": 135, "category": "Unhealthy for Sensitive Groups", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Agra", "AQI": 110, "category": "Poor", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "New York", "AQI": 70, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Los Angeles", "AQI": 85, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Chicago", "AQI": 65, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Houston", "AQI": 95, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "San Francisco", "AQI": 55, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Miami", "AQI": 60, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Philadelphia", "AQI": 68, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Washington, D.C.", "AQI": 72, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Boston", "AQI": 58, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "San Diego", "AQI": 60, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Tokyo", "AQI": 45, "category": "Good", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "London", "AQI": 80, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Paris", "AQI": 60, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Sydney", "AQI": 40, "category": "Good", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Dubai", "AQI": 110, "category": "Unhealthy for Sensitive Groups", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Los Angeles", "AQI": 90, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"}
+//    {"name": "Toronto", "AQI": 50, "category": "Good", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Berlin", "AQI": 65, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Singapore", "AQI": 55, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Jaipur", "AQI": 115, "category": "Unhealthy for Sensitive Groups", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Lucknow", "AQI": 125, "category": "Unhealthy for Sensitive Groups", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Kanpur", "AQI": 130, "category": "Unhealthy for Sensitive Groups", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Nagpur", "AQI": 85, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Thane", "AQI": 100, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Visakhapatnam", "AQI": 93, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Ludhiana", "AQI": 112, "category": "Unhealthy for Sensitive Groups", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Nashik", "AQI": 80, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Faridabad", "AQI": 140, "category": "Unhealthy for Sensitive Groups", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Ghaziabad", "AQI": 145, "category": "Unhealthy", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Coimbatore", "AQI": 70, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Madurai", "AQI": 65, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Dallas", "AQI": 75, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Phoenix", "AQI": 88, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Atlanta", "AQI": 82, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Seattle", "AQI": 50, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Mexico City", "AQI": 120, "category": "Unhealthy for Sensitive Groups", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Moscow", "AQI": 75, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Hong Kong", "AQI": 125, "category": "Unhealthy for Sensitive Groups", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Madrid", "AQI": 70, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+//    {"name": "Rome", "AQI": 65, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    ]
+  }
     """
     val gson = Gson()
     val type = object : TypeToken<CitiesData>() {}.type
@@ -29,13 +81,20 @@ fun loadAQIData(): List<CityAQI> {
 fun loadWQIData(): List<CityWQI> {
     val jsonData = """
         {
-          "cities": [
-            {"name": "Mumbai", "WQI": 70, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
-            {"name": "New York", "WQI": 85, "category": "Good", "lastUpdated": "2024-10-02T09:19:00Z"},
-            {"name": "Tokyo", "WQI": 45, "category": "Poor", "lastUpdated": "2024-10-02T09:19:00Z"},
-            {"name": "Delhi", "WQI": 60, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"}
-          ]
-        }
+  "cities": [
+    {"name": "Mumbai", "WQI": 65, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Delhi", "WQI": 58, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "New York", "WQI": 85, "category": "Good", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Tokyo", "WQI": 80, "category": "Good", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Ahmedabad", "WQI": 62, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Surat", "WQI": 70, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Bengaluru", "WQI": 75, "category": "Good", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Chennai", "WQI": 68, "category": "Moderate", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Hyderabad", "WQI": 74, "category": "Good", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Pune", "WQI": 72, "category": "Good", "lastUpdated": "2024-10-02T09:19:00Z"}
+  ]
+}
+
     """
     val gson = Gson()
     val type = object : TypeToken<CitiesWQIData>() {}.type
@@ -47,13 +106,20 @@ fun loadWQIData(): List<CityWQI> {
 fun loadTemperatureData(): List<CityTemperature> {
     val jsonData = """
         {
-          "cities": [
-            {"name": "Mumbai", "temperatureChange": 1.2, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
-            {"name": "New York", "temperatureChange": 0.9, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
-            {"name": "Tokyo", "temperatureChange": 1.4, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
-            {"name": "Delhi", "temperatureChange": 1.8, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"}
-          ]
-        }
+  "cities": [
+    {"name": "Mumbai", "temperatureChange": 1.2, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Delhi", "temperatureChange": 2.0, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "New York", "temperatureChange": 1.5, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Tokyo", "temperatureChange": 1.8, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Ahmedabad", "temperatureChange": 2.5, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Surat", "temperatureChange": 1.7, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Bengaluru", "temperatureChange": 1.3, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Chennai", "temperatureChange": 2.1, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Hyderabad", "temperatureChange": 1.4, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"},
+    {"name": "Pune", "temperatureChange": 1.6, "unit": "°C", "lastUpdated": "2024-10-02T09:19:00Z"}
+  ]
+}
+
     """
     val gson = Gson()
     val type = object : TypeToken<CitiesTemperatureData>() {}.type

@@ -26,109 +26,149 @@ import com.viz.nasa_simaplequizgame.loadAQIData
 
 @Composable
 fun AQIInfoScreen(cityName: String, onNext: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Air Quality Index (AQI)", style = MaterialTheme.typography.bodySmall)
-        Text("The AQI measures how clean or polluted the air is in $cityName.")
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Button(onClick = onNext) {
-            Text("Next: Guess AQI")
-        }
-    }
+    InfoScreen(
+        title = "Air Quality Index (AQI)",
+        description = "The AQI measures how clean or polluted the air is in $cityName.",
+        cityName = cityName,
+        onNext = onNext
+    )
 }
 
 @Composable
 fun AQIGuessScreen(cityName: String, onNext: () -> Unit) {
-    var guessAQI by remember { mutableStateOf(TextFieldValue("")) }
-    var showResult by remember { mutableStateOf(false) }
-    var actualAQI by remember { mutableStateOf<CityAQI?>(null) }  // Assuming CityAQI has a field 'AQI'
+    val citiesData = loadAQIData() // Load the data for AQI
+    val actualAQI = citiesData.find { it.name.equals(cityName, ignoreCase = true) }?.AQI
 
-    // Load the actual AQI data for the city (you can replace with your data loading logic)
-    val citiesData = loadAQIData()  // Ensure this loads List<CityAQI>
-
-    // Find the AQI for the selected city
-    actualAQI = citiesData.find { it.name.equals(cityName, ignoreCase = true) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        if (!showResult) {
-            // Guess AQI Phase
-            Text("Guess the AQI for $cityName", style = MaterialTheme.typography.bodySmall)
-
-            TextField(
-                value = guessAQI,
-                onValueChange = { guessAQI = it },
-                label = { Text("Your AQI Guess") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Button(onClick = {
-                showResult = true  // Show result after submitting
-            }) {
-                Text("Submit Guess")
-            }
-        } else {
-            // Display actual AQI and difference after the guess
-            actualAQI?.let { aqi ->
-                val guessedValue = guessAQI.text.toIntOrNull() ?: 0
-                val difference = kotlin.math.abs(aqi.AQI - guessedValue)
-
-                Text("Actual AQI for ${aqi.name}: ${aqi.AQI} (${aqi.category})", style = MaterialTheme.typography.bodySmall)
-                Text("Your guess: $guessedValue", style = MaterialTheme.typography.bodyLarge)
-                Text("Difference: $difference", style = MaterialTheme.typography.bodyLarge)
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Button(onClick = onNext) {
-                    Text("Next: AQI Tips")
-                }
-            } ?: run {
-                // In case actual AQI is not found for the city
-                Text("AQI data not available for $cityName", style = MaterialTheme.typography.bodyLarge)
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Button(onClick = onNext) {
-                    Text("Next: AQI Tips")
-                }
-            }
-        }
-    }
+    GuessScreen(
+        title = "Guess the AQI for $cityName",
+        cityName = cityName,
+        actualValue = actualAQI,
+        onNext = onNext
+    )
 }
-
 
 @Composable
 fun AQITipsScreen(cityName: String, onNext: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("How to Improve AQI", style = MaterialTheme.typography.bodySmall)
-        Text("Here are some tips to improve air quality in $cityName:")
-        Text("1. Plant more trees.")
-        Text("2. Reduce vehicle emissions.")
-        Text("3. Use public transportation.")
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Button(onClick = onNext) {
-            Text("Next")
-        }
-    }
+    TipsScreen(
+        title = "How to Improve AQI",
+        tips = listOf(
+            "1. Plant more trees.",
+            "2. Reduce vehicle emissions.",
+            "3. Use public transportation."
+        ),
+        cityName = cityName,
+        onNext = onNext
+    )
 }
+
+
+
+
+//@Composable
+//fun AQIInfoScreen(cityName: String, onNext: () -> Unit) {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(16.dp),
+//        verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        Text("Air Quality Index (AQI)", style = MaterialTheme.typography.bodySmall)
+//        Text("The AQI measures how clean or polluted the air is in $cityName.")
+//        Spacer(modifier = Modifier.height(20.dp))
+//
+//        Button(onClick = onNext) {
+//            Text("Next: Guess AQI")
+//        }
+//    }
+//}
+//
+//@Composable
+//fun AQIGuessScreen(cityName: String, onNext: () -> Unit) {
+//    var guessAQI by remember { mutableStateOf(TextFieldValue("")) }
+//    var showResult by remember { mutableStateOf(false) }
+//    var actualAQI by remember { mutableStateOf<CityAQI?>(null) }  // Assuming CityAQI has a field 'AQI'
+//
+//    // Load the actual AQI data for the city (you can replace with your data loading logic)
+//    val citiesData = loadAQIData()  // Ensure this loads List<CityAQI>
+//
+//    // Find the AQI for the selected city
+//    actualAQI = citiesData.find { it.name.equals(cityName, ignoreCase = true) }
+//
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(16.dp),
+//        verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        if (!showResult) {
+//            // Guess AQI Phase
+//            Text("Guess the AQI for $cityName", style = MaterialTheme.typography.bodySmall)
+//
+//            TextField(
+//                value = guessAQI,
+//                onValueChange = { guessAQI = it },
+//                label = { Text("Your AQI Guess") },
+//                modifier = Modifier.fillMaxWidth()
+//            )
+//            Spacer(modifier = Modifier.height(20.dp))
+//
+//            Button(onClick = {
+//                showResult = true  // Show result after submitting
+//            }) {
+//                Text("Submit Guess")
+//            }
+//        } else {
+//            // Display actual AQI and difference after the guess
+//            actualAQI?.let { aqi ->
+//                val guessedValue = guessAQI.text.toIntOrNull() ?: 0
+//                val difference = kotlin.math.abs(aqi.AQI - guessedValue)
+//
+//                Text("Actual AQI for ${aqi.name}: ${aqi.AQI} (${aqi.category})", style = MaterialTheme.typography.bodySmall)
+//                Text("Your guess: $guessedValue", style = MaterialTheme.typography.bodyLarge)
+//                Text("Difference: $difference", style = MaterialTheme.typography.bodyLarge)
+//
+//                Spacer(modifier = Modifier.height(20.dp))
+//
+//                Button(onClick = onNext) {
+//                    Text("Next: AQI Tips")
+//                }
+//            } ?: run {
+//                // In case actual AQI is not found for the city
+//                Text("AQI data not available for $cityName", style = MaterialTheme.typography.bodyLarge)
+//                Spacer(modifier = Modifier.height(20.dp))
+//
+//                Button(onClick = onNext) {
+//                    Text("Next: AQI Tips")
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//
+//@Composable
+//fun AQITipsScreen(cityName: String, onNext: () -> Unit) {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(16.dp),
+//        verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        Text("How to Improve AQI", style = MaterialTheme.typography.bodySmall)
+//        Text("Here are some tips to improve air quality in $cityName:")
+//        Text("1. Plant more trees.")
+//        Text("2. Reduce vehicle emissions.")
+//        Text("3. Use public transportation.")
+//        Spacer(modifier = Modifier.height(20.dp))
+//
+//        Button(onClick = onNext) {
+//            Text("Next")
+//        }
+//    }
+//}
 
 
 @Composable
